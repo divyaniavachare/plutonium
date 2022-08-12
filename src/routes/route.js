@@ -41,14 +41,14 @@ router.get("/test-api-6" , function(req, res) {
     res.send({a:56, b: 45})
 })
 
-router.post("/test-post", function(req, res) {
-    res.send([ 23, 45 , 6])
-})
+//router.post("/test-post", function(req, res) {
+  //  res.send([ 23, 45 , 6])
+//})
 
 
-router.post("/test-post-2", function(req, res) {
-    res.send(  { msg: "hi" , status: true }  )
-})
+//router.post("/test-post-2", function(req, res) {
+  //  res.send(  { msg: "hi" , status: true }  )
+//})
 
 router.post("/test-post-3", function(req, res) {
     // let id = req.body.user
@@ -69,5 +69,98 @@ router.post("/test-post-4", function(req, res) {
     arr.push(ele)
     res.send(  { msg: arr , status: true }  )
 })
+
+//router.post('/players', function (req, res) {
+
+
+let players =
+   [
+       {
+           "name": "manish",
+           "dob": "1/1/1995",
+           "gender": "male",
+           "city": "jalandhar",
+           "sports": [
+               "swimming"
+           ]
+       },
+       {
+           "name": "gopal",
+           "dob": "1/09/1995",
+           "gender": "male",
+           "city": "delhi",
+           "sports": [
+               "soccer"
+           ],
+       },
+       {
+           "name": "lokesh",
+           "dob": "1/1/1990",
+           "gender": "male",
+           "city": "mumbai",
+           "sports": [
+               "soccer"
+           ],
+       },
+   ]
+
+   
+ router.post("/players", function (req, res) {
+  let playerBody = req.body;
+   let newName = playerBody.name;
+   let isNameRepeated = false;
+
+   for (let i = 0; i < players.length; i++) {
+     if (players[i].name == newName) {
+       isNameRepeated = true;
+       break;
+     }
+   }
+   if (isNameRepeated) {
+     return res.send("The name is already exists.");
+   }
+   players.push(playerBody);
+   res.send(players);
+ });
+
+ router.post("/vote", function (req, res) {
+    let person = [
+      {
+        name: "PK",
+        age: 10,
+        votingStatus: false,
+      },
+      {
+        name: "SK",
+        age: 20,
+        votingStatus: false,
+      },
+      {
+        name: "AA",
+        age: 70,
+        votingStatus: false,
+      },
+      {
+        name: "SC",
+        age: 5,
+        votingStatus: false,
+      },
+      {
+        name: "HO",
+        age: 40,
+        votingStatus: false,
+      },
+    ];
+  let voterAge = req.query.voterAge;
+  
+    for (let i = 0; i < person.length; i++) {
+      if (person[i].age >= voterAge) {
+        person[i].votingStatus = true;
+      }
+    }
+  
+  res.send({ date: person, statu: true });
+  });
+  
 
 module.exports = router;

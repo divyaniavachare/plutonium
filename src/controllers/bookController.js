@@ -41,7 +41,6 @@ const getBooks = async function (req, res) {
     .select({ bookName: 1, _id: 0 });
   res.send({ allBookInfo: allBooksData });
 };
-// =================================Export-Modules====================================
 module.exports.createBook = bookInput;
 module.exports.bookList = GetgiallData;
 module.exports.getBooksInYear = getBooksInYear;

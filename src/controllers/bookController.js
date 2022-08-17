@@ -1,19 +1,19 @@
-const books = require("../bookModel/bookModel");
-// ==========================createBook=============================
+const books = require("../bookModel/bookController");
+// 
 const bookInput = async function (req, res) {
   let data = req.body;
   let savedData = await books.create(data);
   res.send({ bookInfo: savedData });
 };
-// ==========================bookList=============================
-const allData = async function (req, res) {
+// =bookList=
+const GetallData = async function (req, res) {
   let allBooksData = await books.find({
-    bookName: "FunctionUP",
-    authorName: "RKS",
+    bookName: "Data structure",
+    authorName: "DN",
   });
   res.send({ allBookInfo: allBooksData });
 };
-// ==========================getBooksInYear=============================
+// =getBooksInYear=
 const getBooksInYear = async function (req, res) {
   let data = req.query.year;
   let yearData = await books
@@ -21,20 +21,20 @@ const getBooksInYear = async function (req, res) {
     .select({ bookName: 1, _id: 0 });
   res.send({ bookInfo: yearData });
 };
-// ==========================getParticularBooks=============================
+// =getParticularBooks=
 const getParticularBooks = async function (req, res) {
   let data = req.body;
   let yearData = await books.find(data).select({ bookName: 1, _id: 0 });
   res.send(yearData);
 };
-// ==========================getXINRBooks=============================
+// ==getXINRBooks===
 const getXINRBooks = async function (req, res) {
   let allBooksData = await books
-    .find({ "price.indianRupees": { $in: ["₹200", "₹250", "₹500"] } })
+    .find({ "price.indianRupees": { $in: ["₹222", "₹25", "₹50"] } })
     .select({ bookName: 1, _id: 0 });
   res.send({ allBookInfo: allBooksData });
 };
-// ==========================getRandomBooks=============================
+// ==getRandomBooks===
 const getBooks = async function (req, res) {
   let allBooksData = await books
     .find({ totalPages: { $gte: 500 }, stockAvailable: true })
@@ -43,7 +43,7 @@ const getBooks = async function (req, res) {
 };
 // =================================Export-Modules====================================
 module.exports.createBook = bookInput;
-module.exports.bookList = allData;
+module.exports.bookList = GetgiallData;
 module.exports.getBooksInYear = getBooksInYear;
 module.exports.getParticularBooks = getParticularBooks;
 module.exports.getXINRBooks = getXINRBooks;

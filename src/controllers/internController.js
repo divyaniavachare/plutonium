@@ -4,10 +4,6 @@ const mongoose = require('mongoose')
 const collegeModel = require("../models/collegeModels")
 
 
-
-
-
-
 //=================================================create interns====================================================================
 
 const createIntern = async function (req, res) {

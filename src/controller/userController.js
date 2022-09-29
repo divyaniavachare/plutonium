@@ -4,6 +4,18 @@ const moment = require('moment')
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 const { isValidBody, isValid, isValidEmail, isValidpassword, isValidPhone,  isValidPin, isValidFid } = require('../validator/validation')
 
 
@@ -87,7 +99,8 @@ const userLogin = async (req, res) => {
             {
                 userId: user._id.toString(),
             },
-            "Book-Management-Project", { expiresIn: '1h' });
+            "Book-Management-Project", { expiresIn: '1d' });
+
 
         let decode = jwt.verify(token, "Book-Management-Project")
         return res.status(201).send({ status: true, message: "User Login Successfully",decode, token: token })

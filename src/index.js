@@ -1,11 +1,9 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const route = require("./routes/route");
 const { default: mongoose } = require("mongoose");
 const app = express();
 
-app.use(bodyParser.json());
-
+app.use(express.json());
 
 
 mongoose.connect("mongodb+srv://Jyoti273-db:djukOqR9QbI5Itvc@cluster0.nzuylps.mongodb.net/Project-3_Book-Management-db", {

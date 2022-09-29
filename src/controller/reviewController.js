@@ -18,7 +18,7 @@ const createReview = async (req, res) => {
         }
 
         let checkBookId = await bookModel.findOne({ bookId: bookId })
-       
+
         if (checkBookId.isDeleted == true) return res.status(400).send({ status: false, message: "No Such Book Present in Our Book Collection" })
 
         if (isValidBody(data)) return res.status(400).send({ status: false, message: "Please Provide Review Data" })
@@ -26,19 +26,17 @@ const createReview = async (req, res) => {
             return res.status(400).send({ status: true, message: "Please Enter Book Rating between 1-5 (not decimal)." })
         }
         if (reviewedBy) {
-            if (!(reviewedBy)) return res.status(400).send({ status: true, message: "Please provide Book Reviewer name" })
+            if (!(reviewedBy)) return res.status(400).send({ status: true, message: "Please provide Book Reviewer's name" })
             if (!isValid(reviewedBy)) return res.status(400).send({ status: true, message: "Reviewer's Name Should be Alphabets Only" })
         }
-        
+
 
         if (!review) return res.status(400).send({ status: false, message: "Please Enter Valid review" })
         if (!isValidReview(review)) return res.status(400).send({ status: true, message: "Review Should be Alphabets Only" })
 
         data.reviewedAt = Date.now()
         data.bookId = bookId
-
         let bookReview = await reviewModel.create(data)
-
         let filter = { isDeleted: false }
         filter.bookId = bookReview.bookId
         let allReview = await reviewModel.find(filter).select({ _id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 }).sort({ reviewedBy: 1 });
@@ -48,7 +46,7 @@ const createReview = async (req, res) => {
         finalBook._doc.reviewsData = allReview
         return res.status(201).send({ status: true, message: "Review Created Successfully", data: finalBook })
 
-    }catch (err) {
+    } catch (err) {
         return res.status(500).send({ status: false, message: err.message })
     }
 
@@ -82,14 +80,14 @@ const updateReview = async function (req, res) {
 
         if (isValidBody(data)) return res.status(400).send({ status: false, message: "Data requierd in body to update review" })
 
-        let checkUniqValue = await reviewModel.findById(reviewId)  
-        
+        let checkUniqValue = await reviewModel.findById(reviewId)
+
         if (reviewedBy || reviewedBy === "") {
             if (!isValidAdd(reviewedBy)) return res.status(400).send({ status: false, message: "Please Enter Reviewer's Name!" })
-            if (!isValid(reviewedBy)) return res.status(400).send({ status: false, message: "Please Enter Reviewer's Name Correctly!" })  
+            if (!isValid(reviewedBy)) return res.status(400).send({ status: false, message: "Please Enter Reviewer's Name Correctly!" })
             if (checkUniqValue.reviewedBy === reviewedBy) return res.status(400).send({ status: false, message: "Reviewer's Name already exists" })
         }
-       
+
         if (rating || rating === "") {
             if (!isValidRating(rating)) return res.status(400).send({ status: false, message: "Please Enter Book Rating between 1-5 (not decimal)." })
             if (checkUniqValue.rating == rating) return res.status(400).send({ status: false, message: "Rating already exists" })
@@ -102,6 +100,7 @@ const updateReview = async function (req, res) {
         }
 
         const updatedReview = await reviewModel.findByIdAndUpdate({ _id: reviewId }, data, { new: true });
+
 
         let filter = { isDeleted: false }
         filter.bookId = updatedReview.bookId
@@ -145,7 +144,9 @@ const deleteReview = async function (req, res) {
         if (checkReviewId.isDeleted == true)
             return res.status(404).send({ status: false, message: "Review not found and already deleted" })
 
-        await reviewModel.updateOne({ _id: getId.reviewId }, { isDeleted: true }, { $inc: { review: -1 } })
+        await reviewModel.updateOne({ _id: getId.reviewId }, { isDeleted: true })
+
+        await bookModel.updateOne({_id: getId.bookId},{$inc: {reviews: -1}})
 
         return res.status(200).send({ status: true, message: "Deleted Succesfully" })
     } catch (err) {
@@ -159,4 +160,4 @@ const deleteReview = async function (req, res) {
 
 // <<====================================== Exported Modules =========================>>//
 
-module.exports = { createReview,  updateReview ,deleteReview};
+module.exports = { createReview, updateReview, deleteReview };

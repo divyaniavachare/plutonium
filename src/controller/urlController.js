@@ -95,7 +95,7 @@ const fetchUrl = async function (req, res) {
 
         let cacheUrlData = await GET_ASYNC(urlCode);// catch call
 
-        if (cacheUrlData && cacheUrlData != 'null') {
+        if (cacheUrlData ) {
             let object = JSON.parse(cacheUrlData)// converts string to obj
 
             return res.status(302).redirect(object.longUrl);

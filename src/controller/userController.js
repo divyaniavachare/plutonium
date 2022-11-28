@@ -6,20 +6,21 @@ const jwt = require("jsonwebtoken")
 
 
 
-
 const createUser = async (req,res) =>{
     try {
         // extract data and file from RequestBody
         const data = JSON.parse(JSON.stringify(req.body))
+        console.log(data)
 
         let { fname,lname,email, phone,password,address} = data
         
 
         // checking if user does not enters any data
         if (Object.keys(data) == 0) { return res.status(400).send({status:false,message:"No data provided"})}
-
+      
         // checking files are coming or not
         let files= req.files
+        //console.log(files)
         if(files && files.length>0){
             let validImage=files[0].mimetype.split('/')
            
@@ -100,7 +101,7 @@ const createUser = async (req,res) =>{
 
             if (!pincode) return res.status(400).send({ status: false, message: "Enter Shipping Pincode" })
             if(typeof pincode === "string") pincode = pincode.trim()
-            if (!valid.isValidpin(pincode)) return res.status(400).send({ status: false, message: "provide a valid pincode" })
+            if (!valid.isValidpin(pincode)) return res.status(400).send({ status: false, message: "provide a valid pincode" }) 
         }
 
 
@@ -240,8 +241,10 @@ let updateUser = async (req, res) => {
 
             let uploadedFileURL = await uploadFile(files[0])
             updateData.profileImage = uploadedFileURL
+            console.log(uploadedFileURL)
+           
         }
-        
+
         if (fname) {
 
             if (!valid.isValidName(fname)) {
